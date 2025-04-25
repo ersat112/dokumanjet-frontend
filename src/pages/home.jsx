@@ -45,21 +45,7 @@ function Home({ token }) {
     <div style={{ padding: "2rem" }}>
       <h2>Hoş geldiniz</h2>
 
-      {/* Haber kutusu */}
-      {news.length > 0 && (
-        <div style={{ background: "#eff0f5", padding: "1rem", marginTop: "2rem" }}>
-          <h3>Güncel Haberler</h3>
-          <ul>
-            {news.slice(0, 5).map((item, idx) => (
-              <li key={idx}>
-                <a href={item.link} target="_blank" rel="noreferrer">
-                  {item.title}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
+     
 
       {/* OCR kutusu */}
       {token && (
