@@ -134,9 +134,7 @@ function Home({ token }) {
               try {
                 setMessage("Metin çıkarılıyor...");
                 const res = await axios.post("/ocr", formData, {
-                  headers: {
-                    "Content-Type": "multipart/form-data"
-                  }
+                  headers: {"Content-Type": "multipart/form-data"}
                 });
                 setMessage(`Çıkarılan metin: ${res.data.text}`);
               } catch (err) {
