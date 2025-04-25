@@ -5,7 +5,6 @@ function Home({ token }) {
   const [news, setNews] = useState([]);
   const [message, setMessage] = useState("");
   const [ocrResult, setOcrResult] = useState("");
-
   const [weather, setWeather] = useState(null);
 
   useEffect(() => {
