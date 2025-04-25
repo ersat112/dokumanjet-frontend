@@ -20,4 +20,3 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-export { api, VITE_API_URL };
