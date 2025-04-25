@@ -6,6 +6,32 @@ function Home({ token }) {
   const [message, setMessage] = useState("");
   const [ocrResult, setOcrResult] = useState("");
 
+  const [weather, setWeather] = useState(null);
+
+  useEffect(() => {
+  // Haberleri çek
+  const fetchNews = async () => {
+    try {
+      const res = await api.get('/news');
+      setNews(res.data);
+    } catch (err) {
+      console.error("Haber hatası:", err);
+    }
+  };
+
+  // Hava durumunu çek
+  const fetchWeather = async () => {
+    try {
+      const res = await api.get('/weather');
+      setWeather(res.data);
+    } catch (err) {
+      console.error("Hava durumu hatası:", err);
+    }
+  };
+
+  fetchNews();
+  fetchWeather();
+}, []);
 
   const handleOcrSubmit = async (e) => {
     e.preventDefault();
