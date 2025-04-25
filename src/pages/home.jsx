@@ -122,6 +122,7 @@ function Home({ token }) {
         <div style={{ background: "#f5f5f5", padding: "1rem", marginTop: "2rem" }}>
           <h2>Görselden Metin Çıkar (OCR)</h2>
           <form
+            encType="multipart/from-data"
             onSubmit={async (e) => {
               e.preventDefault();
               const file = e.target.image.files[0];
