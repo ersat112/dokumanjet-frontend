@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { api, VITE_API_URL } from '@/utils/api';
+import { api, VITE_API_URL } from "../utils/api";
 
 function Home({ token }) {
   const [news, setNews] = useState([]);
