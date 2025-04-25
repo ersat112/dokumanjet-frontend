@@ -4,7 +4,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import path from "path";
 define: {
-    'process.env.VITE_API_URL': JSON.stringify(process.env.VITE_API_URL || "https://dokumanjet-backend.onrender.com/api/v1")
+    'process.env.VITE_API_URL': JSON.stringify(process.env.VITE_API_URL || "https://dokumanjet-backend.onrender.com/api/v1");
 }
 export default defineConfig({
   plugins: [react()],
