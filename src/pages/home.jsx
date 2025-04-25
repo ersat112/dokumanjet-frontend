@@ -117,6 +117,38 @@ function Home({ token }) {
             ))}
           </ul>
         </div>
+            {/* OCR kutusu */}
+      {token && (
+        <div style={{ background: "#f5f5f5", padding: "1rem", marginTop: "2rem" }}>
+          <h2>Görselden Metin Çıkar (OCR)</h2>
+          <form
+            onSubmit={async (e) => {
+              e.preventDefault();
+              const file = e.target.image.files[0];
+              if (!file) return;
+
+              const formData = new FormData();
+              formData.append("file", file);
+
+              try {
+                setMessage("Metin çıkarılıyor...");
+                const res = await axios.post("/ocr", formData, {
+                  headers: {
+                    "Content-Type": "multipart/form-data"
+                  }
+                });
+                setMessage(`Çıkarılan metin: ${res.data.text}`);
+              } catch (err) {
+                console.error("OCR hatası:", err);
+                setErrorMsg("Görsel işlenemedi. Lütfen geçerli bir resim yükleyin.");
+              }
+            }}
+          >
+            <input type="file" name="image" accept="image/*" />
+            <button type="submit">Gönder</button>
+          </form>
+        </div>
+      )}
       )}
     </div>
   );
