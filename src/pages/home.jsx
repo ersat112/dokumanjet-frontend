@@ -6,18 +6,6 @@ function Home({ token }) {
   const [message, setMessage] = useState("");
   const [ocrResult, setOcrResult] = useState("");
 
-  useEffect(() => {
-    const fetchNews = async () => {
-      try {
-        const response = await api.get("/news");
-        setNews(response.data.articles || []);
-      } catch (error) {
-        console.error("Haber alınamadı:", error);
-      }
-    };
-
-    fetchNews();
-  }, []);
 
   const handleOcrSubmit = async (e) => {
     e.preventDefault();
