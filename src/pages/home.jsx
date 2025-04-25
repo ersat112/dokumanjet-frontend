@@ -1,1 +1,85 @@
+import React, { useEffect, useState } from "react";
+import api from "../utils/api";
 
+function Home({ token }) {
+  const [news, setNews] = useState([]);
+  const [message, setMessage] = useState("");
+  const [ocrResult, setOcrResult] = useState("");
+
+  useEffect(() => {
+    const fetchNews = async () => {
+      try {
+        const response = await api.get("/news");
+        setNews(response.data.articles || []);
+      } catch (error) {
+        console.error("Haber alınamadı:", error);
+      }
+    };
+
+    fetchNews();
+  }, []);
+
+  const handleOcrSubmit = async (e) => {
+    e.preventDefault();
+    const file = e.target.image.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("file", file);
+
+    setMessage("Metin çıkarılıyor...");
+
+    try {
+      const response = await api.post("/ocr", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+      setOcrResult(response.data.text || "Metin bulunamadı.");
+      setMessage("");
+    } catch (error) {
+      console.error("OCR hatası:", error);
+      setMessage("Hata oluştu.");
+    }
+  };
+
+  return (
+    <div style={{ padding: "2rem" }}>
+      <h2>Hoş geldiniz</h2>
+
+      {/* Haber kutusu */}
+      {news.length > 0 && (
+        <div style={{ background: "#eff0f5", padding: "1rem", marginTop: "2rem" }}>
+          <h3>Güncel Haberler</h3>
+          <ul>
+            {news.slice(0, 5).map((item, idx) => (
+              <li key={idx}>
+                <a href={item.link} target="_blank" rel="noreferrer">
+                  {item.title}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {/* OCR kutusu */}
+      {token && (
+        <div style={{ background: "#f5f5f5", padding: "1rem", marginTop: "2rem" }}>
+          <h3>Görselden Metin Çıkar (OCR)</h3>
+          <form onSubmit={handleOcrSubmit}>
+            <input type="file" name="image" accept="image/*" />
+            <button type="submit" style={{ marginLeft: "1rem" }}>Gönder</button>
+          </form>
+          {message && <p>{message}</p>}
+          {ocrResult && (
+            <div style={{ marginTop: "1rem" }}>
+              <strong>Çıkarılan Metin:</strong>
+              <p>{ocrResult}</p>
+            </div>
+          )}
+        </div>
+      )}
+    </div>
+  );
+}
+
+export default Home;
