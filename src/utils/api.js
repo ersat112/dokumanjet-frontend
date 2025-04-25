@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // .env'den gelen API URL'sini al
-export const VITE_API_URL = process.env.VITE_API_URL || "https://dokumanjet-backend.onrender.com/";
+export const VITE_API_URL = process.env.VITE_API_URL || "https://dokumanjet-backend.onrender.com/api/v1";
 
 // Axios örneği oluştur
 const api = axios.create({
