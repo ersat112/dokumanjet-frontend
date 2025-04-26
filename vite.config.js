@@ -5,7 +5,7 @@ import autoprefixer from 'autoprefixer';
 
 export default ({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
-  const apiUrl = env.VITE_API_URL || 'https://dokumanjet-backend.onrender.com/api/v1';
+  const apiUrl = env.VITE_API_URL || 'https://<your-backend-url>';
 
   return defineConfig({
     plugins: [react()],
