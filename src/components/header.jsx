@@ -1,65 +1,44 @@
-// src/components/Header.jsx
-import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React from 'react';
+import { Link } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
-function Header({ token, onLogout }) {
-  const navigate = useNavigate();
-
-  const handleLogout = () => {
-    onLogout();
-    navigate("/login");
-  };
-
+export default function Header({ token, onLogout }) {
   return (
-    <header
-      style={{
-        background: "#ffffff",
-        borderBottom: "1px solid #e0e0e0",
-        padding: "1rem 2rem",
-        display: "flex",
-        justifyContent: "space-between",
-        alignItems: "center",
-        boxShadow: "0 2px 4px rgba(0,0,0,0.05)",
-        position: "sticky",
-        top: 0,
-        zIndex: 1000,
-      }}
+    <motion.header
+      initial={{ y: -50, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.5 }}
+      className="bg-white shadow-md py-4 px-6 flex justify-between items-center"
     >
-      <Link to="/" style={{ textDecoration: "none", color: "#2c3e50", fontWeight: "bold", fontSize: "20px" }}>
+      <Link to="/" className="text-2xl font-bold text-gray-800 hover:text-blue-600">
         DokumanJet
       </Link>
-
-      <nav>
+      <nav className="space-x-4">
+        <Link to="/" className="text-gray-700 hover:text-blue-600">
+          Ana Sayfa
+        </Link>
+        {token && (
+          <Link to="/favorites" className="text-gray-700 hover:text-blue-600">
+            Favoriler
+          </Link>
+        )}
         {token ? (
-          <>
-            <Link to="/favorites" style={linkStyle}>Favoriler</Link>
-            <button onClick={handleLogout} style={buttonStyle}>Çıkış</button>
-          </>
+          <button
+            onClick={onLogout}
+            className="text-gray-700 hover:text-red-600 focus:outline-none"
+          >
+            Çıkış Yap
+          </button>
         ) : (
           <>
-            <Link to="/login" style={linkStyle}>Giriş</Link>
-            <Link to="/register" style={{ ...linkStyle, marginLeft: "1rem" }}>Kayıt</Link>
+            <Link to="/login" className="text-gray-700 hover:text-blue-600">
+              Giriş
+            </Link>
+            <Link to="/register" className="text-gray-700 hover:text-blue-600">
+              Kayıt
+            </Link>
           </>
         )}
       </nav>
-    </header>
-  );
+    </motion.header>
 }
-
-const linkStyle = {
-  marginRight: "1rem",
-  textDecoration: "none",
-  color: "#007bff",
-  fontWeight: "500"
-};
-
-const buttonStyle = {
-  padding: "0.4rem 0.8rem",
-  backgroundColor: "#dc3545",
-  color: "#fff",
-  border: "none",
-  borderRadius: "4px",
-  cursor: "pointer",
-};
-
-export default Header;
