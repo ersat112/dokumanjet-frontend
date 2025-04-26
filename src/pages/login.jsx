@@ -9,9 +9,9 @@ export default function Login() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
     setLoading(true);
     setError('');
@@ -73,14 +73,10 @@ export default function Login() {
           {loading ? 'Yükleniyor...' : 'Giriş Yap'}
         </button>
         <p className="mt-4 text-center text-gray-600">
-          Hesabın yok mu?{' '}
-          <Link to="/register" className="text-blue-600 hover:underline">
-            Kayıt Ol
-          </Link>
+          Hesabın yok mu? <Link to="/register" className="text-blue-600 hover:underline">Kayıt Ol</Link>
         </p>
       </motion.form>
     </div>
-  );
 }
 
 
