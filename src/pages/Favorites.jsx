@@ -1,3 +1,4 @@
+// src/pages/Favorites.jsx
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
@@ -24,6 +25,7 @@ export default function Favorites() {
         className="w-full max-w-3xl bg-white rounded-2xl shadow-lg p-6"
       >
         <h2 className="text-2xl font-bold mb-4">Favorilerim</h2>
+
         {loading ? (
           <p>Yükleniyor...</p>
         ) : error ? (
@@ -47,7 +49,9 @@ export default function Favorites() {
                 >
                   {item.title}
                 </a>
-                <p className="text-gray-600 text-sm mt-1">{item.description}</p>
+                <p className="text-gray-600 text-sm mt-1">
+                  {item.description}
+                </p>
               </li>
             ))}
           </ul>
@@ -56,3 +60,4 @@ export default function Favorites() {
     </div>
   );
 }
+
