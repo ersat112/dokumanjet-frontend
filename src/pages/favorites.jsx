@@ -1,71 +1,57 @@
-import React, { useEffect, useState } from "react";
-import { api } from "../utils/api";
+import React, { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 
-function Favorites({ token }) {
+export default function Favorites() {
   const [favorites, setFavorites] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [errorMsg, setErrorMsg] = useState("");
+  const [error, setError] = useState('');
 
   useEffect(() => {
-    const fetchFavorites = async () => {
-      try {
-        const res = await api.get("/favorites", {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        setFavorites(res.data);
-      } catch (error) {
-        console.error("Favoriler alınamadı:", error);
-        setErrorMsg("Favori kayıtlar yüklenemedi.");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    if (token) {
-      fetchFavorites();
-    }
-  }, [token]);
-
-  if (!token) {
-    return (
-      <div style={{ padding: "2rem", textAlign: "center" }}>
-        <h2>Favoriler</h2>
-        <p>Favorileri görüntülemek için giriş yapmalısınız.</p>
-      </div>
-    );
-  }
+    fetch('/api/favorites', {
+      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+    })
+      .then(res => {
+        if (!res.ok) throw new Error('Veri alınamadı');
+        return res.json();
+      })
+      .then(data => setFavorites(data))
+      .catch(err => setError(err.message))
+      .finally(() => setLoading(false));
+  }, []);
 
   return (
-    <div style={{ background: "#f8f9fa", minHeight: "100vh", padding: "2rem" }}>
-      <h2>Favori Aramalarım</h2>
-
-      {loading && <p>Yükleniyor...</p>}
-
-      {errorMsg && <p style={{ color: "red" }}>{errorMsg}</p>}
-
-      {favorites.length === 0 && !loading && <p>Henüz favori kaydınız yok.</p>}
-
-      <ul style={{ listStyle: "none", padding: 0 }}>
-        {favorites.map((fav) => (
-          <li key={fav.id} style={listItemStyle}>
-            <strong>{fav.keyword}</strong>
-            <br />
-            <small>{fav.user_email}</small>
-          </li>
-        ))}
-      </ul>
+    <div className="min-h-screen bg-gray-50 p-8 flex justify-center">
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5 }}
+        className="w-full max-w-3xl bg-white rounded-2xl shadow-lg p-6"
+      >
+        <h2 className="text-2xl font-bold mb-4">Favorilerim</h2>
+        {loading ? (
+          <p>Yükleniyor...</p>
+        ) : error ? (
+          <p className="text-red-500">{error}</p>
+        ) : favorites.length === 0 ? (
+          <p>Henüz favoriniz yok. <Link to="/" className="text-blue-600 underline">Aramaya dön</Link></p>
+        ) : (
+          <ul className="space-y-4">
+            {favorites.map(item => (
+              <li key={item.id} className="border-b pb-2">
+                <a
+                  href={item.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-blue-600 font-medium hover:underline"
+                >
+                  {item.title}
+                </a>
+                <p className="text-gray-600 text-sm mt-1">{item.description}</p>
+              </li>
+            ))}
+          </ul>
+        )}
+      </motion.div>
     </div>
-  );
 }
-
-const listItemStyle = {
-  background: "#ffffff",
-  padding: "1rem",
-  marginBottom: "1rem",
-  border: "1px solid #ddd",
-  borderRadius: "4px",
-};
-
-export default Favorites;
