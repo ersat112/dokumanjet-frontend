@@ -1,152 +1,118 @@
-// src/pages/Home.jsx
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Search, Mic, Image as ImageIcon } from 'lucide-react';
 import { endpoints } from '../config';
+import axios from 'axios';
 
-const categories = ['Haber', 'Finans', 'Hava Durumu', 'Spor'];
-
-export default function Home() {
-  const [newsList, setNewsList] = useState([]);
+export default function Home({ token }) {
+  const [news, setNews] = useState([]);
   const [weather, setWeather] = useState(null);
-  const [visitors, setVisitors] = useState(null);
-  const [query, setQuery] = useState('');
+  const [visitorCount, setVisitorCount] = useState(0);
 
-  useEffect(() => {
-    fetch(endpoints.news)
-      .then(res => res.json())
-      .then(data => setNewsList(data))
-      .catch(err => console.error('News fetch error:', err));
-
-    fetch(endpoints.weather)
-      .then(res => res.json())
-      .then(data => setWeather(data))
-      .catch(err => console.error('Weather fetch error:', err));
-
-    fetch(endpoints.visitors)
-      .then(res => res.json())
-      .then(data => setVisitors(data.count))
-      .catch(err => console.error('Visitors fetch error:', err));
-  }, []);
-
-  const handleSearch = () => {
-    console.log('Search query:', query);
+  // Hava durumu için şehir alma
+  const fetchWeather = async (latitude, longitude) => {
+    try {
+      const response = await axios.get(`${endpoints.weather}?lat=${latitude}&lon=${longitude}`);
+      setWeather(response.data);
+    } catch (error) {
+      console.error('Weather fetch error:', error);
+    }
   };
 
-  return (
-    <div className="min-h-screen bg-gray-50 flex flex-col items-center p-8">
-      <motion.div
-        className="text-center space-y-4"
-        initial={{ opacity: 0, y: -30 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-      >
-        <img src="/logo.png" alt="DokumanJet Logo" className="w-32 h-32 mx-auto" />
-        <h1 className="text-5xl font-extrabold text-gray-800">
-          Yapay Zeka Destekli Arama Motoru
-        </h1>
-        <p className="text-lg text-gray-600">Belgelerinize jet hızıyla ulaşın</p>
-      </motion.div>
+  // Haberleri çek
+  const fetchNews = async () => {
+    try {
+      const response = await axios.get(endpoints.news);
+      setNews(response.data);
+    } catch (error) {
+      console.error('News fetch error:', error);
+    }
+  };
 
-      <motion.div
-        className="mt-8 w-full max-w-2xl flex items-center space-x-2"
+  // Ziyaretçi sayısını çek
+  const fetchVisitors = async () => {
+    try {
+      const response = await axios.get(endpoints.visitors);
+      setVisitorCount(response.data.count || 0);
+    } catch (error) {
+      console.error('Visitors fetch error:', error);
+    }
+  };
+
+  useEffect(() => {
+    // Tarayıcıdan konum bilgisi iste
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          const { latitude, longitude } = position.coords;
+          fetchWeather(latitude, longitude);
+        },
+        (error) => {
+          console.error('Konum bilgisi alınamadı:', error);
+          // Konum alınamazsa varsayılan şehir kullanabiliriz (örneğin Ankara)
+          fetchWeather(39.9334, 32.8597); // Ankara koordinatları
+        }
+      );
+    } else {
+      console.error('Tarayıcı konum desteği yok.');
+      // Tarayıcı desteklemiyorsa varsayılan konum
+      fetchWeather(39.9334, 32.8597);
+    }
+
+    fetchNews();
+    fetchVisitors();
+  }, []);
+
+  return (
+    <div className="p-6">
+      <motion.h1
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 0.5, duration: 0.5 }}
+        transition={{ duration: 1 }}
+        className="text-4xl font-bold mb-6 text-center text-gray-800"
       >
-        <Search className="text-gray-500" />
-        <input
-          value={query}
-          onChange={e => setQuery(e.target.value)}
-          type="text"
-          placeholder="Ara..."
-          className="flex-1 border border-gray-300 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        <button
-          onClick={handleSearch}
-          className="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700"
-        >
-          Ara
-        </button>
-        <button className="border border-gray-300 px-4 py-2 rounded-full flex items-center hover:bg-gray-100">
-          <Mic className="mr-1 text-gray-600" /> Sesle Ara
-        </button>
-        <button className="border border-gray-300 px-4 py-2 rounded-full flex items-center hover:bg-gray-100">
-          <ImageIcon className="mr-1 text-gray-600" /> Görsel Ara
-        </button>
-      </motion.div>
+        DokumanJet'e Hoşgeldiniz
+      </motion.h1>
 
-      <motion.nav
-        className="mt-6 flex space-x-6"
-        initial={{ x: -50, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        transition={{ delay: 0.7, duration: 0.5 }}
+      <motion.div
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 1 }}
+        className="grid grid-cols-1 md:grid-cols-2 gap-6"
       >
-        {categories.map(cat => (
-          <button
-            key={cat}
-            className="text-gray-700 font-medium hover:text-blue-600"
-          >
-            {cat}
-          </button>
-        ))}
-      </motion.nav>
-
-      <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-6xl">
-        <motion.div
-          className="bg-white shadow-lg rounded-2xl p-6"
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ delay: 0.9, duration: 0.5 }}
-        >
-          <h2 className="text-xl font-semibold mb-2">Güncel Haberler</h2>
-          <ul className="space-y-1 text-gray-600">
-            {newsList.length > 0 ? (
-              newsList.map((item, idx) => <li key={idx}>{item.title}</li>)
-            ) : (
-              <li>Yükleniyor...</li>
-            )}
-          </ul>
-        </motion.div>
-
-        <motion.div
-          className="bg-white shadow-lg rounded-2xl p-6"
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ delay: 1.1, duration: 0.5 }}
-        >
-          <h2 className="text-xl font-semibold mb-2">Hava Durumu</h2>
+        {/* Hava Durumu */}
+        <div className="bg-white p-6 rounded-lg shadow-md">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-700">Hava Durumu</h2>
           {weather ? (
-            <div className="flex items-center space-x-3 text-gray-600">
-              <img src={weather.iconUrl} alt="Weather" className="w-8 h-8" />
-              <div>
-                <p className="font-medium">{weather.location}</p>
-                <p>{weather.temperature}°C • {weather.description}</p>
-              </div>
+            <div>
+              <p><strong>Şehir:</strong> {weather.city}</p>
+              <p><strong>Sıcaklık:</strong> {weather.temperature}°C</p>
+              <p><strong>Durum:</strong> {weather.description}</p>
             </div>
           ) : (
-            <p>Yükleniyor...</p>
+            <p>Hava durumu verisi yükleniyor...</p>
           )}
-        </motion.div>
+        </div>
 
-        <motion.div
-          className="bg-white shadow-lg rounded-2xl p-6 text-center"
-          initial={{ scale: 0.8, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ delay: 1.3, duration: 0.5 }}
-        >
-          <h2 className="text-xl font-semibold mb-2">Ziyaretçi Sayısı</h2>
-          <p className="text-4xl font-bold text-blue-600">
-            {visitors !== null ? visitors : '...'}
-          </p>
-        </motion.div>
-      </div>
+        {/* Güncel Haberler */}
+        <div className="bg-white p-6 rounded-lg shadow-md">
+          <h2 className="text-2xl font-semibold mb-4 text-gray-700">Güncel Haberler</h2>
+          <ul className="list-disc pl-5 space-y-2">
+            {news.map((item, index) => (
+              <li key={index}>{item.title}</li>
+            ))}
+          </ul>
+        </div>
+      </motion.div>
 
-      <footer className="mt-16 text-gray-500 text-sm">
-        © {new Date().getFullYear()} DokumanJet. Tüm hakları saklıdır.
-      </footer>
+      {/* Ziyaretçi Sayacı */}
+      <motion.div
+        initial={{ y: 20, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 1 }}
+        className="mt-8 text-center text-gray-600"
+      >
+        <p>Şu anda {visitorCount} kullanıcı bizimle!</p>
+      </motion.div>
     </div>
   );
 }
-
-
