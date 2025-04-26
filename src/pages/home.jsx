@@ -1,28 +1,43 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Home from './pages/Home';
-
-export default function App() {
-  return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Home />} />
-      </Routes>
-    </Router>
-  );
-}
-
 // src/pages/Home.jsx
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Search, Mic, Image as ImageIcon } from 'lucide-react';
 
 const categories = ['Haber', 'Finans', 'Hava Durumu', 'Spor'];
 
 export default function Home() {
+  const [newsList, setNewsList] = useState([]);
+  const [weather, setWeather] = useState(null);
+  const [visitors, setVisitors] = useState(null);
+  const [query, setQuery] = useState('');
+
+  useEffect(() => {
+    // Haberleri çek
+    fetch('/api/news')
+      .then((res) => res.json())
+      .then((data) => setNewsList(data))
+      .catch((err) => console.error('News fetch error:', err));
+
+    // Hava durumu çek
+    fetch('/api/weather')
+      .then((res) => res.json())
+      .then((data) => setWeather(data))
+      .catch((err) => console.error('Weather fetch error:', err));
+
+    // Ziyaretçi sayısı çek
+    fetch('/api/visitors')
+      .then((res) => res.json())
+      .then((data) => setVisitors(data.count))
+      .catch((err) => console.error('Visitors fetch error:', err));
+  }, []);
+
+  const handleSearch = () => {
+    // Arama işlemi backend ile entegre edilecek
+    console.log('Search query:', query);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col items-center p-8">
-      {/* Hero Section */}
       <motion.div
         className="text-center space-y-4"
         initial={{ opacity: 0, y: -30 }}
@@ -38,7 +53,6 @@ export default function Home() {
         </p>
       </motion.div>
 
-      {/* Search Bar */}
       <motion.div
         className="mt-8 w-full max-w-2xl flex items-center space-x-2"
         initial={{ opacity: 0 }}
@@ -47,11 +61,16 @@ export default function Home() {
       >
         <Search className="text-gray-500" />
         <input
+          value={query}
+          onChange={(e) => setQuery(e.target.value)}
           type="text"
           placeholder="Ara..."
           className="flex-1 border border-gray-300 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
         />
-        <button className="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700">
+        <button
+          onClick={handleSearch}
+          className="bg-blue-600 text-white px-6 py-2 rounded-full hover:bg-blue-700"
+        >
           Ara
         </button>
         <button className="border border-gray-300 px-4 py-2 rounded-full flex items-center hover:bg-gray-100">
@@ -62,7 +81,6 @@ export default function Home() {
         </button>
       </motion.div>
 
-      {/* Categories Navigation */}
       <motion.nav
         className="mt-6 flex space-x-6"
         initial={{ x: -50, opacity: 0 }}
@@ -79,7 +97,6 @@ export default function Home() {
         ))}
       </motion.nav>
 
-      {/* Info Cards */}
       <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-6xl">
         <motion.div
           className="bg-white shadow-lg rounded-2xl p-6"
@@ -89,9 +106,11 @@ export default function Home() {
         >
           <h2 className="text-xl font-semibold mb-2">Güncel Haberler</h2>
           <ul className="space-y-1 text-gray-600">
-            <li>Örnek Haber Başlığı 1</li>
-            <li>Örnek Haber Başlığı 2</li>
-            <li>Örnek Haber Başlığı 3</li>
+            {newsList.length > 0 ? (
+              newsList.map((item, idx) => <li key={idx}>{item.title}</li>)
+            ) : (
+              <li>Yükleniyor...</li>
+            )}
           </ul>
         </motion.div>
 
@@ -102,13 +121,17 @@ export default function Home() {
           transition={{ delay: 1.1, duration: 0.5 }}
         >
           <h2 className="text-xl font-semibold mb-2">Hava Durumu</h2>
-          <div className="flex items-center space-x-3 text-gray-600">
-            <img src="/weather-icon.png" alt="Weather" className="w-8 h-8" />
-            <div>
-              <p className="font-medium">İstanbul</p>
-              <p>18°C • Açık</p>
+          {weather ? (
+            <div className="flex items-center space-x-3 text-gray-600">
+              <img src={weather.iconUrl} alt="Weather" className="w-8 h-8" />
+              <div>
+                <p className="font-medium">{weather.location}</p>
+                <p>{weather.temperature}&deg;C • {weather.description}</p>
+              </div>
             </div>
-          </div>
+          ) : (
+            <p>Yükleniyor...</p>
+          )}
         </motion.div>
 
         <motion.div
@@ -118,11 +141,12 @@ export default function Home() {
           transition={{ delay: 1.3, duration: 0.5 }}
         >
           <h2 className="text-xl font-semibold mb-2">Ziyaretçi Sayısı</h2>
-          <p className="text-4xl font-bold text-blue-600">12.345</p>
+          <p className="text-4xl font-bold text-blue-600">
+            {visitors !== null ? visitors : '...'}
+          </p>
         </motion.div>
       </div>
 
-      {/* Footer */}
       <footer className="mt-16 text-gray-500 text-sm">
         © {new Date().getFullYear()} DokumanJet. Tüm hakları saklıdır.
       </footer>
