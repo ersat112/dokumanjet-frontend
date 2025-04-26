@@ -9,9 +9,9 @@ export default function Register() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = e => setForm({ ...form, [e.target.name]: e.target.value });
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async e => {
     e.preventDefault();
     setLoading(true);
     setError('');
@@ -83,12 +83,7 @@ export default function Register() {
           {loading ? 'Yükleniyor...' : 'Kayıt Ol'}
         </button>
         <p className="mt-4 text-center text-gray-600">
-          Hesabın var mı?{' '}
-          <Link to="/login" className="text-blue-600 hover:underline">
-            Giriş Yap
-          </Link>
+          Hesabın var mı? <Link to="/login" className="text-blue-600 hover:underline">Giriş Yap</Link>
         </p>
       </motion.form>
-    </div>
-  );
 }
