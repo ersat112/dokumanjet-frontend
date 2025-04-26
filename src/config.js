@@ -1,6 +1,6 @@
 // src/config.js
 // Backend URL'i Vercel ortam değişkeninden alır, tanımlı değilse buradaki URL'i kullanır
-export const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://dokumanjet-backend.onrender.com';
+export const API_BASE_URL = import.meta.env.VITE_API_URL || 'https://dokumanjet-backend.onrender.com/api/v1';
 
 export const endpoints = {
   news:      `${API_BASE_URL}/api/news`,
