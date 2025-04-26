@@ -1,24 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
-import { Link } from 'react-router-dom';
-
 export default function Favorites() {
-  const [favorites, setFavorites] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-
-  useEffect(() => {
-    fetch('/api/favorites', {
-      headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
-    })
-      .then(res => {
-        if (!res.ok) throw new Error('Veri alınamadı');
-        return res.json();
-      })
-      .then(data => setFavorites(data))
-      .catch(err => setError(err.message))
-      .finally(() => setLoading(false));
-  }, []);
+  // …state ve useEffect
 
   return (
     <div className="min-h-screen bg-gray-50 p-8 flex justify-center">
@@ -34,7 +15,12 @@ export default function Favorites() {
         ) : error ? (
           <p className="text-red-500">{error}</p>
         ) : favorites.length === 0 ? (
-          <p>Henüz favoriniz yok. <Link to="/" className="text-blue-600 underline">Aramaya dön</Link></p>
+          <p>
+            Henüz favoriniz yok.{' '}
+            <Link to="/" className="text-blue-600 underline">
+              Aramaya dön
+            </Link>
+          </p>
         ) : (
           <ul className="space-y-4">
             {favorites.map(item => (
@@ -47,11 +33,14 @@ export default function Favorites() {
                 >
                   {item.title}
                 </a>
-                <p className="text-gray-600 text-sm mt-1">{item.description}</p>
+                <p className="text-gray-600 text-sm mt-1">
+                  {item.description}
+                </p>
               </li>
             ))}
           </ul>
         )}
       </motion.div>
-    </div>
+  );   // ← burası eksikti
 }
+
