@@ -1,6 +1,8 @@
+// src/pages/Home.jsx
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Search, Mic, Image as ImageIcon } from 'lucide-react';
+import { endpoints } from '../config';
 
 const categories = ['Haber', 'Finans', 'Hava Durumu', 'Spor'];
 
@@ -11,15 +13,17 @@ export default function Home() {
   const [query, setQuery] = useState('');
 
   useEffect(() => {
-    fetch('/api/news')
+    fetch(endpoints.news)
       .then(res => res.json())
       .then(data => setNewsList(data))
       .catch(err => console.error('News fetch error:', err));
-    fetch('/api/weather')
+
+    fetch(endpoints.weather)
       .then(res => res.json())
       .then(data => setWeather(data))
       .catch(err => console.error('Weather fetch error:', err));
-    fetch('/api/visitors')
+
+    fetch(endpoints.visitors)
       .then(res => res.json())
       .then(data => setVisitors(data.count))
       .catch(err => console.error('Visitors fetch error:', err));
@@ -144,3 +148,5 @@ export default function Home() {
     </div>
   );
 }
+
+
