@@ -12,27 +12,24 @@ export default function Home() {
   const [query, setQuery] = useState('');
 
   useEffect(() => {
-    // Haberleri çek
     fetch('/api/news')
-      .then((res) => res.json())
-      .then((data) => setNewsList(data))
-      .catch((err) => console.error('News fetch error:', err));
+      .then(res => res.json())
+      .then(data => setNewsList(data))
+      .catch(err => console.error('News fetch error:', err));
 
-    // Hava durumu çek
     fetch('/api/weather')
-      .then((res) => res.json())
-      .then((data) => setWeather(data))
-      .catch((err) => console.error('Weather fetch error:', err));
+      .then(res => res.json())
+      .then(data => setWeather(data))
+      .catch(err => console.error('Weather fetch error:', err));
 
-    // Ziyaretçi sayısı çek
     fetch('/api/visitors')
-      .then((res) => res.json())
-      .then((data) => setVisitors(data.count))
-      .catch((err) => console.error('Visitors fetch error:', err));
+      .then(res => res.json())
+      .then(data => setVisitors(data.count))
+      .catch(err => console.error('Visitors fetch error:', err));
   }, []);
 
   const handleSearch = () => {
-    // Arama işlemi backend ile entegre edilecek
+    // Implement search integration
     console.log('Search query:', query);
   };
 
@@ -48,9 +45,7 @@ export default function Home() {
         <h1 className="text-5xl font-extrabold text-gray-800">
           Yapay Zeka Destekli Arama Motoru
         </h1>
-        <p className="text-lg text-gray-600">
-          Belgelerinize jet hızıyla ulaşın
-        </p>
+        <p className="text-lg text-gray-600">Belgelerinize jet hızıyla ulaşın</p>
       </motion.div>
 
       <motion.div
@@ -62,7 +57,7 @@ export default function Home() {
         <Search className="text-gray-500" />
         <input
           value={query}
-          onChange={(e) => setQuery(e.target.value)}
+          onChange={e => setQuery(e.target.value)}
           type="text"
           placeholder="Ara..."
           className="flex-1 border border-gray-300 rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
@@ -87,7 +82,7 @@ export default function Home() {
         animate={{ x: 0, opacity: 1 }}
         transition={{ delay: 0.7, duration: 0.5 }}
       >
-        {categories.map((cat) => (
+        {categories.map(cat => (
           <button
             key={cat}
             className="text-gray-700 font-medium hover:text-blue-600"
@@ -126,7 +121,7 @@ export default function Home() {
               <img src={weather.iconUrl} alt="Weather" className="w-8 h-8" />
               <div>
                 <p className="font-medium">{weather.location}</p>
-                <p>{weather.temperature}&deg;C • {weather.description}</p>
+                <p>{weather.temperature}°C • {weather.description}</p>
               </div>
             </div>
           ) : (
@@ -141,9 +136,7 @@ export default function Home() {
           transition={{ delay: 1.3, duration: 0.5 }}
         >
           <h2 className="text-xl font-semibold mb-2">Ziyaretçi Sayısı</h2>
-          <p className="text-4xl font-bold text-blue-600">
-            {visitors !== null ? visitors : '...'}
-          </p>
+          <p className="text-4xl font-bold text-blue-600">{visitors !== null ? visitors : '...'}</p>
         </motion.div>
       </div>
 
@@ -153,4 +146,3 @@ export default function Home() {
     </div>
   );
 }
-
