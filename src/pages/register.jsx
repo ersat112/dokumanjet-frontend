@@ -1,82 +1,94 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { api } from "../utils/api";
+// src/pages/Register.jsx
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { motion } from 'framer-motion';
 
-function Register({ onLogin }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [loading, setLoading] = useState(false);
-  const [errorMsg, setErrorMsg] = useState("");
+export default function Register() {
   const navigate = useNavigate();
+  const [form, setForm] = useState({ name: '', email: '', password: '' });
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
-    setErrorMsg("");
-
+    setError('');
     try {
-      const res = await api.post("/auth/register", { email, password });
-      const token = res.data.access_token;
-      onLogin(token);
-      navigate("/");
-    } catch (error) {
-      console.error("Kayıt hatası:", error);
-      if (error.response?.status === 409) {
-        setErrorMsg("Bu e-posta zaten kayıtlı.");
-      } else {
-        setErrorMsg("Kayıt başarısız. Lütfen bilgilerinizi kontrol edin.");
-      }
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(form),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Kayıt başarısız');
+      navigate('/login');
+    } catch (err) {
+      setError(err.message);
     } finally {
       setLoading(false);
     }
   };
 
   return (
-    <div style={{ background: "#f8f9fa", minHeight: "100vh", padding: "2rem" }}>
-      <h2>Kayıt Ol</h2>
-      <form onSubmit={handleSubmit} style={{ maxWidth: "400px", margin: "2rem auto" }}>
-        <input
-          type="email"
-          placeholder="E-posta"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-          style={inputStyle}
-        />
-        <input
-          type="password"
-          placeholder="Şifre (en az 6 karakter)"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-          minLength={6}
-          style={inputStyle}
-        />
-        <button type="submit" style={buttonStyle} disabled={loading}>
-          {loading ? "Kayıt Yapılıyor..." : "Kayıt Ol"}
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <motion.form
+        onSubmit={handleSubmit}
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.5 }}
+        className="bg-white p-8 rounded-2xl shadow-lg w-full max-w-md"
+      >
+        <h2 className="text-2xl font-bold mb-6 text-gray-800">Kayıt Ol</h2>
+        {error && <p className="text-red-500 mb-4">{error}</p>}
+        <label className="block mb-4">
+          <span className="text-gray-700">Ad Soyad</span>
+          <input
+            type="text"
+            name="name"
+            value={form.name}
+            onChange={handleChange}
+            required
+            className="mt-1 block w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </label>
+        <label className="block mb-4">
+          <span className="text-gray-700">Email</span>
+          <input
+            type="email"
+            name="email"
+            value={form.email}
+            onChange={handleChange}
+            required
+            className="mt-1 block w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </label>
+        <label className="block mb-6">
+          <span className="text-gray-700">Şifre</span>
+          <input
+            type="password"
+            name="password"
+            value={form.password}
+            onChange={handleChange}
+            required
+            className="mt-1 block w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+          />
+        </label>
+        <button
+          type="submit"
+          disabled={loading}
+          className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition disabled:opacity-50"
+        >
+          {loading ? 'Yükleniyor...' : 'Kayıt Ol'}
         </button>
-      </form>
-      {errorMsg && <p style={{ color: "red", textAlign: "center" }}>{errorMsg}</p>}
+        <p className="mt-4 text-center text-gray-600">
+          Hesabın var mı?{' '}
+          <Link to="/login" className="text-blue-600 hover:underline">
+            Giriş Yap
+          </Link>
+        </p>
+      </motion.form>
     </div>
   );
 }
-
-const inputStyle = {
-  width: "100%",
-  padding: "0.8rem",
-  marginBottom: "1rem",
-  border: "1px solid #ccc",
-  borderRadius: "4px",
-};
-
-const buttonStyle = {
-  width: "100%",
-  padding: "0.8rem",
-  backgroundColor: "#28a745",
-  color: "#fff",
-  border: "none",
-  borderRadius: "4px",
-  cursor: "pointer",
-};
-
-export default Register;
