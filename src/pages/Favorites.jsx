@@ -1,5 +1,19 @@
+import React, { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
+import { api } from '../utils/api';
+
 export default function Favorites() {
-  // …state ve useEffect
+  const [favorites, setFavorites] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    api.fetchFavorites()
+      .then((data) => setFavorites(data))
+      .catch((err) => setError(err.message))
+      .finally(() => setLoading(false));
+  }, []);
 
   return (
     <div className="min-h-screen bg-gray-50 p-8 flex justify-center">
@@ -23,7 +37,7 @@ export default function Favorites() {
           </p>
         ) : (
           <ul className="space-y-4">
-            {favorites.map(item => (
+            {favorites.map((item) => (
               <li key={item.id} className="border-b pb-2">
                 <a
                   href={item.url}
@@ -33,14 +47,12 @@ export default function Favorites() {
                 >
                   {item.title}
                 </a>
-                <p className="text-gray-600 text-sm mt-1">
-                  {item.description}
-                </p>
+                <p className="text-gray-600 text-sm mt-1">{item.description}</p>
               </li>
             ))}
           </ul>
         )}
       </motion.div>
-  );   // ← burası eksikti
+    </div>
+  );
 }
-
