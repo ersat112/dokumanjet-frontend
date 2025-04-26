@@ -2,12 +2,13 @@ import { defineConfig, loadEnv } from 'vite';
 import react from '@vitejs/plugin-react';
 
 export default ({ mode }) => {
-  // Load .env based on `mode` (development, production, etc.)
+  // Load environment variables based on mode
   const env = loadEnv(mode, process.cwd(), '');
-  // Use the Render-hosted backend URL or fallback
   const apiUrl = env.VITE_API_URL || 'https://dokumanjet-backend.onrender.com/api/v1';
 
   return defineConfig({
+    root: 'public',          // Serve index.html from public/
+    publicDir: 'public',     // Static assets directory
     plugins: [react()],
     server: {
       port: 3000,
@@ -23,6 +24,10 @@ export default ({ mode }) => {
       alias: {
         '@': '/src'
       }
+    },
+    build: {
+      outDir: '../dist',     // Output to project-root/dist
+      emptyOutDir: true       // Clear dist before build
     }
   });
 };
