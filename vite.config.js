@@ -5,7 +5,7 @@ export default ({ mode }) => {
   // Load .env based on `mode` (development, production, etc.)
   const env = loadEnv(mode, process.cwd(), '');
   // Use the Render-hosted backend URL or fallback
-  const apiUrl = env.VITE_API_URL || 'https://dokumanjet-backend.onrender.com/';
+  const apiUrl = env.VITE_API_URL || 'https://dokumanjet-backend.onrender.com/api/v1';
 
   return defineConfig({
     plugins: [react()],
