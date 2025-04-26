@@ -1,4 +1,3 @@
-// src/pages/Home.jsx
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Search, Mic, Image as ImageIcon } from 'lucide-react';
@@ -16,12 +15,10 @@ export default function Home() {
       .then(res => res.json())
       .then(data => setNewsList(data))
       .catch(err => console.error('News fetch error:', err));
-
     fetch('/api/weather')
       .then(res => res.json())
       .then(data => setWeather(data))
       .catch(err => console.error('Weather fetch error:', err));
-
     fetch('/api/visitors')
       .then(res => res.json())
       .then(data => setVisitors(data.count))
@@ -29,7 +26,6 @@ export default function Home() {
   }, []);
 
   const handleSearch = () => {
-    // Implement search integration
     console.log('Search query:', query);
   };
 
@@ -136,7 +132,9 @@ export default function Home() {
           transition={{ delay: 1.3, duration: 0.5 }}
         >
           <h2 className="text-xl font-semibold mb-2">Ziyaretçi Sayısı</h2>
-          <p className="text-4xl font-bold text-blue-600">{visitors !== null ? visitors : '...'}</p>
+          <p className="text-4xl font-bold text-blue-600">
+            {visitors !== null ? visitors : '...'}
+          </p>
         </motion.div>
       </div>
 
