@@ -11,7 +11,7 @@
   "rewrites": [
     { "source": "/favicon.ico", "destination": "/favicon.ico" },
     { "source": "/assets/:path*", "destination": "/assets/:path*" },
-    { "source": "/(.*)", "destination": "/index.html" }
+    { "source": "(/.*)", "destination": "/index.html" }
   ],
   "headers": [
     {
@@ -22,5 +22,11 @@
     }
   ],
   "cleanUrls": true,
-  "trailingSlash": false
+  "trailingSlash": false,
+  "build": {
+    "env": {
+      "NODE_ENV": "production",
+      "VITE_API_URL": "https://dokumanjet-backend.onrender.com/api/v1"
+    }
+  }
 }
