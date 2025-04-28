@@ -11,6 +11,8 @@
   "rewrites": [
     { "source": "/favicon.ico", "destination": "/favicon.ico" },
     { "source": "/assets/:path*", "destination": "/assets/:path*" },
+    { "source": "/fonts/:path*", "destination": "/fonts/:path*" },
+    { "source": "/manifest.json", "destination": "/manifest.json" },
     { "source": "(/.*)", "destination": "/index.html" }
   ],
   "headers": [
