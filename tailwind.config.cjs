@@ -1,7 +1,5 @@
-// Tailwind config without @tailwindcss/forms to avoid missing module errors
+// tailwind.config.cjs - forms plugin removed to fix missing module error
 /** @type {import('tailwindcss').Config} */
-const typography = require('@tailwindcss/typography');
-
 module.exports = {
   content: [
     './index.html',
@@ -10,15 +8,15 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: '#2563EB', // blue-600
-        secondary: '#10B981', // green-500
+        primary: '#2563EB',
+        secondary: '#10B981'
       },
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
-      },
+        sans: ['Inter', 'sans-serif']
+      }
     }
   },
   plugins: [
-    typography
-  ],
+    require('@tailwindcss/typography')
+  ]
 };
