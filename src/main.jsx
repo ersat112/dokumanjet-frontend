@@ -1,4 +1,5 @@
 // src/main.jsx
+import './main.css';
 import React, { Suspense } from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter as Router } from 'react-router-dom';
@@ -57,3 +58,15 @@ class ErrorBoundary extends React.Component {
     return this.props.children;
   }
 }
+
+ReactDOM.createRoot(document.getElementById('root')).render(
+  <React.StrictMode>
+    <ErrorBoundary>
+      <Router>
+        <Suspense fallback={<Loading />}>
+          <App />
+        </Suspense>
+      </Router>
+    </ErrorBoundary>
+  </React.StrictMode>
+);
