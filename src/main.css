@@ -3,27 +3,14 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Custom Global Styles */
+/* Global Styles */
 body {
   @apply bg-gray-50 text-gray-800 font-sans leading-relaxed;
   margin: 0;
   padding: 0;
 }
 
-/* Typography */
-
-h1, .text-4xl {
-  @apply text-4xl font-extrabold text-gray-900;
-}
-
-h2, .text-2xl {
-  @apply text-2xl font-semibold text-gray-800;
-}
-
-p, span, label {
-  @apply text-base text-gray-700;
-}
-
+/* Links */
 a {
   @apply text-blue-600 hover:underline transition-colors;
 }
@@ -42,17 +29,19 @@ a {
   @apply bg-purple-500 text-white hover:bg-purple-600;
 }
 
-/* Card Component */
+/* Cards */
 .card {
   @apply bg-white rounded-lg shadow-md p-6;
 }
 
-/* Form Inputs */
-input, textarea, select {
+/* Form Elements */
+input,
+textarea,
+select {
   @apply border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400;
 }
 
-/* Scrollbar Styling */
+/* Scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
 }
@@ -63,13 +52,12 @@ input, textarea, select {
   @apply bg-gray-200;
 }
 
-/* Responsive Utilities */
+/* Responsive Container Padding */
 @screen md {
   .container {
     @apply px-6;
   }
 }
-
 @screen lg {
   .container {
     @apply px-8;
