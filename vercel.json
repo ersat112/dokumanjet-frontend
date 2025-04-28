@@ -1,5 +1,6 @@
 {
   "version": 2,
+  "public": true,
   "builds": [
     {
       "src": "package.json",
@@ -8,6 +9,17 @@
     }
   ],
   "routes": [
-    { "src": "/(.*)", "dest": "/$1" }
+    { "handle": "filesystem" },
+    { "src": "/favicon.ico", "dest": "/favicon.ico" },
+    { "src": "/assets/(.*)", "dest": "/assets/$1" },
+    { "src": "/(.*)", "dest": "/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
+      ]
+    }
   ]
 }
