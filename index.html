@@ -2,14 +2,39 @@
 <html lang="tr">
   <head>
     <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>DokumanJet</title>
+    <meta name="theme-color" content="#FFFFFF" />
+    <meta name="description" content="DokumanJet: Yapay zekâ destekli belge arama motoru" />
+
+    <!-- Open Graph Meta Tags -->
+    <meta property="og:title" content="DokumanJet" />
+    <meta property="og:description" content="Yapay zekâ destekli belge arama ve yönetim platformu" />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://dokumanjet.com" />
+    <meta property="og:image" content="/og-image.png" />
+
+    <!-- Twitter Card Meta Tags -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="DokumanJet" />
+    <meta name="twitter:description" content="Yapay zekâ destekli belge arama ve yönetim platformu" />
+    <meta name="twitter:image" content="/og-image.png" />
+
+    <!-- Favicon & App Icons -->
     <link rel="icon" href="/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.json" />
+
+    <!-- Preload Fonts -->
+    <link rel="preload" href="/fonts/Inter-VariableFont.ttf" as="font" type="font/ttf" crossorigin />
+
+    <title>DokumanJet</title>
   </head>
-  <body>
-    <noscript>JavaScript etkinleştirilmelidir.</noscript>
+  <body class="bg-gray-50 text-gray-800">
+    <noscript>
+      JavaScript etkinleştirilmelidir.
+    </noscript>
     <div id="root"></div>
     <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
-
