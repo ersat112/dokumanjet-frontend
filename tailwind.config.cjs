@@ -18,11 +18,7 @@ module.exports = {
     }
   },
   plugins: [
-    // Uncomment after installing @tailwindcss/forms
-    // require('@tailwindcss/forms'),
     typography
   ],
-  corePlugins: {
-    // enable or disable core plugins here if needed
-  }
 };
+
