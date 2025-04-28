@@ -1,5 +1,4 @@
 /** @type {import('tailwindcss').Config} */
-const forms = require('@tailwindcss/forms');
 const typography = require('@tailwindcss/typography');
 
 module.exports = {
@@ -19,7 +18,8 @@ module.exports = {
     }
   },
   plugins: [
-    forms,
+    // Uncomment after installing @tailwindcss/forms
+    // require('@tailwindcss/forms'),
     typography
   ],
   corePlugins: {
