@@ -8,27 +8,8 @@
       "config": { "distDir": "dist" }
     }
   ],
-  "rewrites": [
-    { "source": "/favicon.ico", "destination": "/favicon.ico" },
-    { "source": "/assets/:path*", "destination": "/assets/:path*" },
-    { "source": "/fonts/:path*", "destination": "/fonts/:path*" },
-    { "source": "/manifest.json", "destination": "/manifest.json" },
-    { "source": "(/.*)", "destination": "/index.html" }
-  ],
-  "headers": [
-    {
-      "source": "(.*)",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=0, must-revalidate" }
-      ]
-    }
-  ],
-  "cleanUrls": true,
-  "trailingSlash": false,
-  "build": {
-    "env": {
-      "NODE_ENV": "production",
-      "VITE_API_URL": "https://dokumanjet-backend.onrender.com/api/v1"
-    }
-  }
+  "routes": [
+    { "handle": "filesystem" },
+    { "src": "^/(.*)$", "dest": "/index.html" }
+  ]
 }
