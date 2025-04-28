@@ -1,3 +1,4 @@
+// Tailwind config without @tailwindcss/forms to avoid missing module errors
 /** @type {import('tailwindcss').Config} */
 const typography = require('@tailwindcss/typography');
 
@@ -21,4 +22,3 @@ module.exports = {
     typography
   ],
 };
-
