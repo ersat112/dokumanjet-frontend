@@ -4,26 +4,18 @@ import tailwindcss from 'tailwindcss';
 import autoprefixer from 'autoprefixer';
 import path from 'path';
 
-export default ({ mode }) => {
+export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
 
-  const isProd = mode === 'production';
-
-  return defineConfig({
+  return {
+    plugins: [react()],
     define: {
-      '__DEFINES__': JSON.stringify(env),
-      '__HMR_CONFIG_NAME__': JSON.stringify(isProd ? '' : 'dev'),
+      'process.env': env,
     },
     base: '/',
-    plugins: [
-      react(),
-    ],
     css: {
       postcss: {
-        plugins: [
-          tailwindcss,
-          autoprefixer,
-        ],
+        plugins: [tailwindcss, autoprefixer],
       },
     },
     resolve: {
@@ -32,12 +24,12 @@ export default ({ mode }) => {
       },
     },
     server: {
-      hmr: !isProd,
+      hmr: mode === 'development',
     },
     build: {
       outDir: 'dist',
       minify: 'esbuild',
       sourcemap: false,
     },
-  });
-};
+  };
+});
