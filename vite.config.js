@@ -7,9 +7,12 @@ import path from 'path';
 export default ({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '');
 
+  const isProd = mode === 'production';
+
   return defineConfig({
     define: {
       '__DEFINES__': JSON.stringify(env),
+      '__HMR_CONFIG_NAME__': JSON.stringify(isProd ? '' : 'dev'),
     },
     base: '/',
     plugins: [
@@ -29,7 +32,7 @@ export default ({ mode }) => {
       },
     },
     server: {
-      hmr: mode === 'development' ? { overlay: false } : false,
+      hmr: !isProd,
     },
     build: {
       outDir: 'dist',
