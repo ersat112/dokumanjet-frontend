@@ -25,13 +25,14 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="manifest" href="/manifest.json" />
 
+    <!-- Vite client for HMR -->
+    <script type="module" src="/@vite/client"></script>
+    <!-- Entry point -->
+    <script type="module" src="/src/main.jsx"></script>
+
     <title>DokumanJet</title>
   </head>
   <body>
-    <noscript>
-      JavaScript etkinleştirilmelidir.
-    </noscript>
     <div id="root"></div>
-    <script type="module" src="/src/main.jsx"></script>
   </body>
 </html>
