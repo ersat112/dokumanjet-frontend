@@ -6,52 +6,46 @@ import autoprefixer from 'autoprefixer'
 import path from 'path'
 
 export default ({ mode }) => {
-  // 1) .env dosyalarını yükle (prefix sınırlaması yok)
+  // 1) .env dosyalarını yükle (prefix sınırı yok)
   const env = loadEnv(mode, process.cwd(), '')
 
-  // 2) { KEY: "value", ... } → { KEY: JSON.stringify(value) } formatına çevir
+  // 2) { KEY: "value" } → { KEY: JSON.stringify(value) }
   const defineEnv = Object.fromEntries(
     Object.entries(env).map(([key, val]) => [key, JSON.stringify(val)])
   )
 
-  // 3) Özel API ayarınız
-  const API_PREFIX = '/api'
+  // 3) API ayarlarınız
   const API_URL = env.VITE_API_URL || 'https://dokumanjet-backend.onrender.com/api/v1'
+  // 4) Base path (build zamanında kodunuzda __BASE__ olarak kullanılır)
+  const base = '/'
 
   return defineConfig({
-    base: '/',
+    base,
     plugins: [react()],
     server: {
       port: 3000,
       open: true,
       strictPort: true,
       proxy: {
-        [API_PREFIX]: {
+        '/api': {
           target: API_URL,
           changeOrigin: true,
           secure: false,
-          rewrite: (p) => p.replace(new RegExp(`^${API_PREFIX}`), '')
+          rewrite: (p) => p.replace(/^\/api/, '')
         }
       }
     },
     resolve: {
-      alias: {
-        '@': path.resolve(__dirname, 'src')
-      }
+      alias: { '@': path.resolve(__dirname, 'src') }
     },
     define: {
-      // 4) tüm env değişkenlerinizi bu global altında kullanabilirsiniz:
-      //      __DEFINES__.VITE_API_URL, __DEFINES__.OTHER_KEY, vb.
       __DEFINES__: defineEnv,
-      // 5) eskiden kullandığınız __API_URL__ global’i de devam ediyor
       __API_URL__: JSON.stringify(API_URL),
-      // 6) HMR placeholder’ını boş obje ile stub’luyoruz
-      __HMR_CONFIG_NAME__: JSON.stringify({})
+      __HMR_CONFIG_NAME__: JSON.stringify({}),
+      __BASE__: JSON.stringify(base)
     },
     css: {
-      postcss: {
-        plugins: [tailwindcss(), autoprefixer()]
-      }
+      postcss: { plugins: [tailwindcss(), autoprefixer()] }
     },
     build: {
       outDir: 'dist',
