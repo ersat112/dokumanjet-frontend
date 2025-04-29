@@ -6,7 +6,7 @@ import path from 'path';
 
 export default defineConfig({
   plugins: [react()],
-  base: '/',
+  base: process.env.NODE_ENV === 'production' ? '/' : '/', // Dinamik base ayarı
   css: {
     postcss: {
       plugins: [tailwindcss, autoprefixer],
@@ -14,12 +14,21 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      '@': path.resolve(__dirname, 'src'),
+      '@': path.resolve(__dirname, 'src'), // '@' alias'ı 'src' dizinine yönlendirilir
     },
+  },
+  define: {
+    __BASE__: JSON.stringify(process.env.BASE_URL || '/'), // __BASE__ değişkeni tanımlandı
   },
   build: {
     outDir: 'dist',
-    sourcemap: false,
+    sourcemap: true, // Debugging için sourcemap açık
     minify: 'esbuild',
+    assetsDir: 'assets', // Statik dosyalar için dizin ayarı
+    chunkSizeWarningLimit: 1000, // Büyük dosyalar için uyarı limiti (KB)
+  },
+  server: {
+    port: 3000,
+    open: true, // Tarayıcı otomatik açılır
   },
 });
