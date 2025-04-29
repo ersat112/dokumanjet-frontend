@@ -1,16 +1,31 @@
 /* src/main.css */
+
+/* 1. Font-face bildirimi */
+@font-face {
+  font-family: 'Inter';
+  font-style: normal;
+  font-weight: 100 900; /* Variable font weight range */
+  font-display: swap;
+  src: url('/fonts/Inter-VariableFont.ttf') format('truetype');
+}
+
+/* 2. Tailwind direktifleri */
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Global Styles */
+/* 3. Global font-family */
+html {
+  font-family: 'Inter', sans-serif;
+}
+
+/* 4. Global Styles */
 body {
-  @apply bg-gray-50 text-gray-800 font-sans leading-relaxed;
+  @apply bg-gray-50 text-gray-800 leading-relaxed;
   margin: 0;
   padding: 0;
 }
 
-/* Links */
 a {
   @apply text-blue-600 hover:underline transition-colors;
 }
@@ -40,9 +55,6 @@ textarea,
 select {
   @apply border border-gray-300 rounded-md p-2 focus:outline-none focus:ring-2 focus:ring-blue-400;
 }
-
-/* Utility Classes Already in Tailwind - Do Not Reapply */
-/* Avoid circular dependencies by not applying text-size utilities here */
 
 /* Scrollbar */
 ::-webkit-scrollbar {
