@@ -1,38 +1,40 @@
-import { defineConfig, loadEnv } from 'vite'
-import react from '@vitejs/plugin-react'
-import tailwindcss from 'tailwindcss'
-import autoprefixer from 'autoprefixer'
-import path from 'path'
+import { defineConfig, loadEnv } from 'vite';
+import react from '@vitejs/plugin-react';
+import tailwindcss from 'tailwindcss';
+import autoprefixer from 'autoprefixer';
+import path from 'path';
 
 export default ({ mode }) => {
-  const env = loadEnv(mode, process.cwd(), '')
+  const env = loadEnv(mode, process.cwd(), '');
 
   return defineConfig({
     define: {
-      '__DEFINES__': JSON.stringify(env)
+      '__DEFINES__': JSON.stringify(env),
     },
     base: '/',
     plugins: [
-      react()
+      react(),
     ],
     css: {
       postcss: {
         plugins: [
           tailwindcss,
-          autoprefixer
-        ]
-      }
+          autoprefixer,
+        ],
+      },
     },
     resolve: {
       alias: {
-        '@': path.resolve(__dirname, 'src')
-      }
+        '@': path.resolve(__dirname, 'src'),
+      },
     },
     server: {
-      hmr: mode === 'development'
+      hmr: mode === 'development' ? { overlay: false } : false,
     },
     build: {
-      outDir: 'dist'
-    }
-  })
-}
+      outDir: 'dist',
+      minify: 'esbuild',
+      sourcemap: false,
+    },
+  });
+};
