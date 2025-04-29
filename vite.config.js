@@ -18,7 +18,8 @@ export default defineConfig({
     },
   },
   define: {
-    __BASE__: JSON.stringify(process.env.BASE_URL || '/'), // __BASE__ değişkeni tanımlandı
+    __BASE__: JSON.stringify(process.env.BASE_URL || '/'), // __BASE__ tanımlandı
+    __DEFINES__: JSON.stringify(true), // __DEFINES__ değişkeni tanımlandı
   },
   build: {
     outDir: 'dist',
