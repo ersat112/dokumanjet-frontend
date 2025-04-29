@@ -6,17 +6,12 @@ import autoprefixer from 'autoprefixer'
 import path from 'path'
 
 export default ({ mode }) => {
-  // 1) .env dosyalarını yükle (prefix sınırlaması yok)
   const env = loadEnv(mode, process.cwd(), '')
-
-  // 2) { KEY: "value" } → { KEY: JSON.stringify(value) }
   const defineEnv = Object.fromEntries(
-    Object.entries(env).map(([key, val]) => [key, JSON.stringify(val)])
+    Object.entries(env).map(([k, v]) => [k, JSON.stringify(v)])
   )
 
-  // 3) API ayarlarınız
   const API_URL = env.VITE_API_URL || 'https://dokumanjet-backend.onrender.com/api/v1'
-  // 4) Base path (build zamanında kodunuzda __BASE__ olarak kullanılır)
   const base = '/'
 
   return defineConfig({
@@ -39,21 +34,20 @@ export default ({ mode }) => {
       alias: { '@': path.resolve(__dirname, 'src') }
     },
     define: {
-      // Projenizdeki tüm .env değişkenleri:
       __DEFINES__: defineEnv,
-      // Eski global API URL’iniz:
       __API_URL__: JSON.stringify(API_URL),
 
-      // HMR ve base placeholder’ları stub’landı:
-      __HMR_CONFIG_NAME__: JSON.stringify({}),
-      __SERVER_HOST__:       JSON.stringify(''),
-      __HMR_PROTOCOL__:      JSON.stringify(''),
-      __HMR_PORT__:          JSON.stringify(''),
-      __HMR_HOSTNAME__:      JSON.stringify(''),
-      __HMR_BASE__:          JSON.stringify(''),
-      __HMR_DIRECT_TARGET__: JSON.stringify(''),
-      __WS_TOKEN__:          JSON.stringify(''),
-      __BASE__:              JSON.stringify(base)
+      // HMR / overlay / base stub’ları
+      __HMR_CONFIG_NAME__:  JSON.stringify({}),
+      __SERVER_HOST__:      JSON.stringify(''),
+      __HMR_PROTOCOL__:     JSON.stringify(''),
+      __HMR_PORT__:         JSON.stringify(''),
+      __HMR_HOSTNAME__:     JSON.stringify(''),
+      __HMR_BASE__:         JSON.stringify(''),
+      __HMR_DIRECT_TARGET__:JSON.stringify(''),
+      __WS_TOKEN__:         JSON.stringify(''),
+      __HMR_ENABLE_OVERLAY__: JSON.stringify(false),
+      __BASE__:             JSON.stringify(base)
     },
     css: {
       postcss: { plugins: [tailwindcss(), autoprefixer()] }
