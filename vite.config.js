@@ -44,7 +44,9 @@ export default ({ mode }) => {
       //      __DEFINES__.VITE_API_URL, __DEFINES__.OTHER_KEY, vb.
       __DEFINES__: defineEnv,
       // 5) eskiden kullandığınız __API_URL__ global’i de devam ediyor
-      __API_URL__: JSON.stringify(API_URL)
+      __API_URL__: JSON.stringify(API_URL),
+      // 6) HMR placeholder’ını boş obje ile stub’luyoruz
+      __HMR_CONFIG_NAME__: JSON.stringify({})
     },
     css: {
       postcss: {
