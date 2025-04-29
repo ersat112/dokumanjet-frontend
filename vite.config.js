@@ -19,7 +19,7 @@ export default defineConfig({
   },
   define: {
     __BASE__: JSON.stringify(process.env.BASE_URL || '/'), // __BASE__ tanımlandı
-    __DEFINES__: JSON.stringify(true), // __DEFINES__ değişkeni tanımlandı
+    __HMR_CONFIG_NAME__: JSON.stringify('HMR Config'), // __HMR_CONFIG_NAME__ tanımlandı
   },
   build: {
     outDir: 'dist',
@@ -31,5 +31,9 @@ export default defineConfig({
   server: {
     port: 3000,
     open: true, // Tarayıcı otomatik açılır
+    hmr: {
+      host: 'localhost',
+      port: 3000, // HMR için gerekli yapılandırma
+    },
   },
 });
