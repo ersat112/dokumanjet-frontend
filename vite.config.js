@@ -6,7 +6,7 @@ import autoprefixer from 'autoprefixer'
 import path from 'path'
 
 export default ({ mode }) => {
-  // 1) .env dosyalarını yükle (prefix sınırı yok)
+  // 1) .env dosyalarını yükle (prefix sınırlaması yok)
   const env = loadEnv(mode, process.cwd(), '')
 
   // 2) { KEY: "value" } → { KEY: JSON.stringify(value) }
@@ -39,10 +39,21 @@ export default ({ mode }) => {
       alias: { '@': path.resolve(__dirname, 'src') }
     },
     define: {
+      // Projenizdeki tüm .env değişkenleri:
       __DEFINES__: defineEnv,
+      // Eski global API URL’iniz:
       __API_URL__: JSON.stringify(API_URL),
+
+      // HMR ve base placeholder’ları stub’landı:
       __HMR_CONFIG_NAME__: JSON.stringify({}),
-      __BASE__: JSON.stringify(base)
+      __SERVER_HOST__:       JSON.stringify(''),
+      __HMR_PROTOCOL__:      JSON.stringify(''),
+      __HMR_PORT__:          JSON.stringify(''),
+      __HMR_HOSTNAME__:      JSON.stringify(''),
+      __HMR_BASE__:          JSON.stringify(''),
+      __HMR_DIRECT_TARGET__: JSON.stringify(''),
+      __WS_TOKEN__:          JSON.stringify(''),
+      __BASE__:              JSON.stringify(base)
     },
     css: {
       postcss: { plugins: [tailwindcss(), autoprefixer()] }
